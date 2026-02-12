@@ -1,45 +1,32 @@
 # TestFlight Beta Açıklamaları
 
-## 1. Beta App Description (Test Uygulama Açıklaması)
+## 1. Beta App Description (Test Uygulama Açıklaması) - MAX 4000 KARAKTER
 
 ```
-Ekşi Duyuru - Her Bir Şey Okuyucu
+ekşi duyuru okuyucu uygulaması. eksiduyuru.com'daki her bir şey gönderilerini görüntüleyin.
 
-Bu uygulama, eksiduyuru.com üzerindeki gönderileri okumanızı sağlayan minimal bir okuyucu uygulamasıdır.
+test edilecekler:
+• gönderi listesi ve detayları
+• yorumları görüntüleme
+• safari'de açma
+• daha fazla yükle (sayfalama)
+• pull-to-refresh
 
-Beta testinde olup test etmenizi istediğim özellikler:
-• Ana sayfada gönderilerin düzgün yüklenmesi
-• Gönderi detaylarında içeriğin ve yorumların görüntülenmesi
-• Safari ile tarayıcıda açma özelliği
-• "Daha Fazla Yükle" ile eski gönderilerin yüklenmesi
-• Pull-to-refresh ile yenileme
+not: sadece okuma uygulamasıdır. giriş veya yorum yapma yoktur. resmi ekşi duyuru uygulaması değildir.
 
-Uygulama sadece okuma amaçlıdır, giriş/yorum yapma desteği yoktur.
-
-Not: Bu uygulama resmi bir Ekşi Duyuru uygulaması değildir. Kamuya açık içeriği görüntüler.
+geri bildirim: testflight üzerinden "send beta feedback" butonunu kullanın.
 ```
 
-## 2. What to Test (Neleri Test Etmeli)
+## 2. What to Test (Neleri Test Etmeli) - MAX 4000 KARAKTER
 
 ```
-Lütfen aşağıdaki özellikleri test edin ve geri bildirim verin:
+test edilecekler:
 
-1. Gönderi Listesi
-   - Gönderiler düzgün yükleniyor mu?
-   - Scroll performansı nasıl?
-   - "Daha Fazla Yükle" çalışıyor mu?
+1. gönderi listesi: yüklenme, scroll, "daha fazla yükle"
+2. gönderi detayı: içerik, yorumlar, safari'de açma
+3. genel: çökme, yavaşlama, hata mesajları
 
-2. Gönderi Detayı
-   - İçerik tam görünüyor mu?
-   - Yorumlar yükleniyor mu?
-   - Safari'de açma çalışıyor mu?
-
-3. Genel
-   - Uygulama çöküyor mu?
-   - Yavaşlama var mı?
-   - Herhangi bir hata mesajı alıyor musunuz?
-
-Geri bildirimlerinizi TestFlight üzerinden veya GitHub Issues'a yazabilirsiniz.
+geri bildirim: testflight > send beta feedback
 ```
 
 ## 3. Beta App Review Information (Beta İnceleme Bilgileri)
