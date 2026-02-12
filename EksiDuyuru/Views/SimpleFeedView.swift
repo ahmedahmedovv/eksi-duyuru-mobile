@@ -5,11 +5,22 @@
 
 import SwiftUI
 
-// MARK: - Color Extensions
+// MARK: - Color Extensions (Matching eksiduyuru.com CSS)
 extension Color {
-    static let appGreen = Color(red: 0.22, green: 0.56, blue: 0.24)
-    static let appBackground = Color(.systemGroupedBackground)
-    static let cardBackground = Color(.secondarySystemGroupedBackground)
+    // --ed-brand-green: #369400
+    static let brandGreen = Color(red: 0.212, green: 0.580, blue: 0.0)
+    // --ed-brand-green-darkest: #184700 (for author names)
+    static let brandGreenDarkest = Color(red: 0.094, green: 0.278, blue: 0.0)
+    // --ed-brand-title-eksi: #CCFF00 (lime/yellow-green accent)
+    static let eksiYellow = Color(red: 0.80, green: 1.0, blue: 0.0)
+    // --ed-body-bg: #D0D9BC (sage green background)
+    static let sageBackground = Color(red: 0.816, green: 0.851, blue: 0.737)
+    // --ed-entry-background-color: #E6E5E5 (card background)
+    static let entryBackground = Color(red: 0.902, green: 0.898, blue: 0.898)
+    // --ed-text-primary: #222
+    static let textPrimary = Color(red: 0.133, green: 0.133, blue: 0.133)
+    // --ed-text-secondary: #757575
+    static let textSecondary = Color(red: 0.459, green: 0.459, blue: 0.459)
 }
 
 // MARK: - Main Feed View
@@ -24,7 +35,7 @@ struct SimpleFeedView: View {
     var body: some View {
         NavigationView {
             ZStack {
-                Color.appBackground.ignoresSafeArea()
+                Color.sageBackground.ignoresSafeArea()
                 
                 ScrollViewReader { proxy in
                     List {
@@ -58,16 +69,26 @@ struct SimpleFeedView: View {
                     }
                 }
             }
-            .navigationTitle("Ekşi Duyuru")
-            .navigationBarTitleDisplayMode(.large)
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                ToolbarItem(placement: .principal) {
+                    // Custom title matching website: yellow "Ekşi" + gray "Duyuru"
+                    HStack(spacing: 0) {
+                        Text("Ekşi")
+                            .font(.system(size: 20, weight: .bold))
+                            .foregroundColor(.eksiYellow)
+                        Text("Duyuru")
+                            .font(.system(size: 20, weight: .bold))
+                            .foregroundColor(Color(white: 0.85))
+                    }
+                }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
                         scrollToTop.toggle()
                     }) {
                         Image(systemName: "arrow.up.circle.fill")
                             .font(.title3)
-                            .foregroundColor(.appGreen)
+                            .foregroundColor(.brandGreen)
                     }
                     .disabled(posts.isEmpty)
                 }
@@ -153,10 +174,10 @@ struct PostCard: View {
                     HStack(spacing: 4) {
                         Image(systemName: "person.circle.fill")
                             .font(.caption)
-                            .foregroundColor(.appGreen)
+                            .foregroundColor(.brandGreen)
                         Text(post.author)
                             .font(.system(size: 13, weight: .medium))
-                            .foregroundColor(.appGreen)
+                            .foregroundColor(.brandGreenDarkest)
                     }
                     
                     Spacer()
@@ -171,12 +192,12 @@ struct PostCard: View {
             }
             .background(
                 RoundedRectangle(cornerRadius: 16)
-                    .fill(Color.cardBackground)
+                    .fill(Color.entryBackground)
                     .shadow(color: Color.black.opacity(0.08), radius: 8, x: 0, y: 2)
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 16)
-                    .stroke(Color.appGreen.opacity(0.1), lineWidth: 1)
+                    .stroke(Color.brandGreen.opacity(0.1), lineWidth: 1)
             )
         }
         .buttonStyle(PlainButtonStyle())
@@ -199,7 +220,7 @@ struct CommentBadge: View {
         .padding(.vertical, 4)
         .background(
             Capsule()
-                .fill(Color.appGreen)
+                .fill(Color.brandGreen)
         )
     }
 }
@@ -232,12 +253,12 @@ struct LoadMoreSection: View {
                         Image(systemName: "chevron.down")
                             .font(.system(size: 12, weight: .semibold))
                     }
-                    .foregroundColor(.appGreen)
+                    .foregroundColor(.brandGreen)
                     .padding(.horizontal, 20)
                     .padding(.vertical, 12)
                     .background(
                         Capsule()
-                            .fill(Color.appGreen.opacity(0.12))
+                            .fill(Color.brandGreen.opacity(0.12))
                     )
                 }
                 .padding(.vertical, 16)
@@ -269,11 +290,11 @@ struct PostDetailView: View {
                     HStack(spacing: 8) {
                         Image(systemName: "person.circle.fill")
                             .font(.title3)
-                            .foregroundColor(.appGreen)
+                            .foregroundColor(.brandGreen)
                         
                         Text(post.author)
                             .font(.system(size: 15, weight: .semibold))
-                            .foregroundColor(.appGreen)
+                            .foregroundColor(.brandGreenDarkest)
                         
                         Spacer()
                         
@@ -285,7 +306,7 @@ struct PostDetailView: View {
                 .padding(20)
                 .background(
                     RoundedRectangle(cornerRadius: 16)
-                        .fill(Color.cardBackground)
+                        .fill(Color.entryBackground)
                         .shadow(color: Color.black.opacity(0.06), radius: 6, x: 0, y: 2)
                 )
                 .padding(.horizontal, 16)
@@ -308,7 +329,7 @@ struct PostDetailView: View {
                     .padding(20)
                     .background(
                         RoundedRectangle(cornerRadius: 16)
-                            .fill(Color.cardBackground)
+                            .fill(Color.entryBackground)
                     )
                     .padding(.horizontal, 16)
                     .padding(.top, 12)
@@ -366,7 +387,7 @@ struct PostDetailView: View {
                 }
                 .background(
                     RoundedRectangle(cornerRadius: 16)
-                        .fill(Color.cardBackground)
+                        .fill(Color.entryBackground)
                         .shadow(color: Color.black.opacity(0.06), radius: 6, x: 0, y: 2)
                 )
                 .padding(.horizontal, 16)
@@ -374,7 +395,7 @@ struct PostDetailView: View {
                 .padding(.bottom, 20)
             }
         }
-        .background(Color.appBackground.ignoresSafeArea())
+        .background(Color.sageBackground.ignoresSafeArea())
         .navigationBarTitleDisplayMode(.inline)
         .task {
             await loadComments()
@@ -410,7 +431,7 @@ struct CommentRow: View {
                 Text(comment.author)
                     .font(.system(size: 14, weight: .semibold))
             }
-            .foregroundColor(.appGreen)
+            .foregroundColor(.brandGreen)
             
             // Content
             Text(comment.content)
@@ -443,7 +464,7 @@ struct LoadingOverlay: View {
         VStack(spacing: 16) {
             ProgressView()
                 .scaleEffect(1.5)
-                .tint(.appGreen)
+                .tint(.brandGreen)
             
             Text("Yükleniyor...")
                 .font(.system(size: 15, weight: .medium))
@@ -452,7 +473,7 @@ struct LoadingOverlay: View {
         .padding(32)
         .background(
             RoundedRectangle(cornerRadius: 16)
-                .fill(Color.cardBackground)
+                .fill(Color.entryBackground)
                 .shadow(color: Color.black.opacity(0.1), radius: 20, x: 0, y: 4)
         )
     }
