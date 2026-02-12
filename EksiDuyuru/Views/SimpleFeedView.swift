@@ -130,7 +130,8 @@ struct PostCard: View {
     let post: Post
     
     var body: some View {
-        NavigationLink(destination: PostDetailView(post: post)) {
+        ZStack {
+            // Card content
             VStack(alignment: .leading, spacing: 0) {
                 // Title section
                 Text(post.title)
@@ -182,8 +183,13 @@ struct PostCard: View {
                 RoundedRectangle(cornerRadius: 16)
                     .stroke(Color.brandGreen.opacity(0.1), lineWidth: 1)
             )
+            
+            // Invisible NavigationLink overlay (no disclosure indicator)
+            NavigationLink(destination: PostDetailView(post: post)) {
+                EmptyView()
+            }
+            .opacity(0)
         }
-        .buttonStyle(PlainButtonStyle())
     }
 }
 
