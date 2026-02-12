@@ -194,4 +194,73 @@ class APIService {
         guard let swiftRange = Range(range, in: string) else { return nil }
         return String(string[swiftRange])
     }
+    
+    // MARK: - Comments
+    
+    func fetchComments(for postId: Int) async throws -> [Comment] {
+        let urlString = "\(baseURL)/duyuru/\(postId)/"
+        
+        guard let url = URL(string: urlString) else {
+            throw NSError(domain: "Invalid URL", code: -1)
+        }
+        
+        let (data, _) = try await session.data(from: url)
+        
+        guard let html = String(data: data, encoding: .utf8) else {
+            throw NSError(domain: "Invalid encoding", code: -1)
+        }
+        
+        return try parseCommentsFromHTML(html)
+    }
+    
+    private func parseCommentsFromHTML(_ html: String) throws -> [Comment] {
+        var comments: [Comment] = []
+        
+        // Comments are called "answers" in the HTML
+        // Each comment has: id="cev{number}", answertext class for content, answerposter class for author
+        let commentPattern = #"<div\s+id="cev(\d+)"\s+class="answerbody"[^>]*>"#
+        let textPattern = #"<div\s+class="answertext"[^>]*>(.+?)</div>"#
+        let authorPattern = #"<div\s+class="answerposter"[^>]*>\s*<span[^>]*>([^<]*)</span>"#
+        
+        let commentRegex = try? NSRegularExpression(pattern: commentPattern, options: [.dotMatchesLineSeparators])
+        let textRegex = try? NSRegularExpression(pattern: textPattern, options: [.dotMatchesLineSeparators])
+        let authorRegex = try? NSRegularExpression(pattern: authorPattern, options: [.dotMatchesLineSeparators])
+        
+        let commentMatches = commentRegex?.matches(in: html, options: [], range: NSRange(html.startIndex..., in: html)) ?? []
+        
+        for (index, commentMatch) in commentMatches.enumerated() {
+            guard let idRange = Range(commentMatch.range(at: 1), in: html) else { continue }
+            let idString = String(html[idRange])
+            guard let id = Int(idString) else { continue }
+            
+            // Extract the section from this comment to the next one
+            let commentStart = commentMatch.range.location
+            let nextCommentStart = (index + 1 < commentMatches.count) ? commentMatches[index + 1].range.location : html.count
+            let commentLength = nextCommentStart - commentStart
+            guard let commentRange = Range(NSRange(location: commentStart, length: commentLength), in: html) else { continue }
+            let commentSection = String(html[commentRange])
+            
+            // Extract author from answerposter div
+            let authorMatch = authorRegex?.firstMatch(in: commentSection, options: [], range: NSRange(commentSection.startIndex..., in: commentSection))
+            var author = extractGroup(from: authorMatch, at: 1, in: commentSection) ?? "anonim"
+            author = author.trimmingCharacters(in: .whitespacesAndNewlines)
+            if author.isEmpty { author = "anonim" }
+            
+            // Extract content from answertext div
+            let textMatch = textRegex?.firstMatch(in: commentSection, options: [], range: NSRange(commentSection.startIndex..., in: commentSection))
+            var content = extractGroup(from: textMatch, at: 1, in: commentSection) ?? ""
+            content = cleanHTML(content)
+            
+            let comment = Comment(
+                id: id,
+                content: content,
+                author: author,
+                createdAt: Date()
+            )
+            
+            comments.append(comment)
+        }
+        
+        return comments
+    }
 }
