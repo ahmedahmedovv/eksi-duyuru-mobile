@@ -386,6 +386,17 @@ struct PostDetailView: View {
         }
         .background(Color.sageBackground.ignoresSafeArea())
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                if let urlString = post.url, let url = URL(string: urlString) {
+                    Link(destination: url) {
+                        Image(systemName: "safari")
+                            .font(.title3)
+                            .foregroundColor(.brandGreen)
+                    }
+                }
+            }
+        }
         .task {
             await loadComments()
         }
