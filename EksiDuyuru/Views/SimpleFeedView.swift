@@ -11,7 +11,7 @@ extension Color {
     static let brandGreen = Color(red: 0.212, green: 0.580, blue: 0.0)
     // --ed-brand-green-darkest: #184700 (for author names)
     static let brandGreenDarkest = Color(red: 0.094, green: 0.278, blue: 0.0)
-    // --ed-brand-title-eksi: #CCFF00 (lime/yellow-green accent)
+    // --ed-brand-title-eksi: #CCFF00 (bright yellow/lime for Ekşi logo)
     static let eksiYellow = Color(red: 0.80, green: 1.0, blue: 0.0)
     // --ed-body-bg: #D0D9BC (sage green background)
     static let sageBackground = Color(red: 0.816, green: 0.851, blue: 0.737)
@@ -30,7 +30,6 @@ struct SimpleFeedView: View {
     @State private var isLoadingMore = false
     @State private var errorMessage: String?
     @State private var hasMorePages = true
-    @State private var scrollToTop = false
     
     var body: some View {
         NavigationView {
@@ -60,37 +59,21 @@ struct SimpleFeedView: View {
                     .refreshable {
                         await refresh()
                     }
-                    .onChange(of: scrollToTop) { _ in
-                        if let firstId = posts.first?.id {
-                            withAnimation {
-                                proxy.scrollTo(firstId, anchor: .top)
-                            }
-                        }
-                    }
+
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    // Custom title matching website: yellow "Ekşi" + gray "Duyuru"
+                    // Custom title: yellow "Ekşi" + white "Duyuru" like website header
                     HStack(spacing: 0) {
                         Text("Ekşi")
                             .font(.system(size: 20, weight: .bold))
                             .foregroundColor(.eksiYellow)
                         Text("Duyuru")
                             .font(.system(size: 20, weight: .bold))
-                            .foregroundColor(Color(white: 0.85))
+                            .foregroundColor(.white)
                     }
-                }
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {
-                        scrollToTop.toggle()
-                    }) {
-                        Image(systemName: "arrow.up.circle.fill")
-                            .font(.title3)
-                            .foregroundColor(.brandGreen)
-                    }
-                    .disabled(posts.isEmpty)
                 }
             }
         }
